@@ -1,0 +1,97 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Search Algorithm Visualizer</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <style>
+    .grid-cell { transition: background-color 110ms ease, transform 110ms ease, box-shadow 110ms ease; }
+    .grid-cell:hover { transform: scale(1.04); }
+  </style>
+</head>
+<body class="min-h-screen bg-slate-950 text-slate-100">
+  <main class="mx-auto max-w-7xl px-4 py-8 sm:px-6 lg:px-8">
+    <header class="mb-6">
+      <p class="text-xs font-semibold uppercase tracking-[0.25em] text-cyan-400">Python + Flask + Tailwind + JavaScript</p>
+      <h1 class="mt-2 text-3xl font-bold tracking-tight sm:text-4xl">BFS, DFS &amp; A* Search Visualizer</h1>
+      <p class="mt-2 max-w-3xl text-sm leading-6 text-slate-400">
+        Build walls, move the start and goal nodes, choose an algorithm, and watch the server-computed search animate in the browser.
+      </p>
+    </header>
+
+    <section class="grid gap-5 lg:grid-cols-[300px_1fr]">
+      <aside class="rounded-2xl border border-slate-800 bg-slate-900/80 p-5 shadow-xl shadow-black/20">
+        <div class="space-y-5">
+          <div>
+            <label for="algorithm" class="mb-2 block text-sm font-medium text-slate-300">Algorithm</label>
+            <select id="algorithm" class="w-full rounded-xl border border-slate-700 bg-slate-950 px-3 py-2.5 text-sm outline-none focus:border-cyan-500">
+              <option value="bfs">Breadth-First Search (BFS)</option>
+              <option value="dfs">Depth-First Search (DFS)</option>
+              <option value="astar">A* Search</option>
+            </select>
+          </div>
+
+          <div>
+            <p class="mb-2 text-sm font-medium text-slate-300">Edit mode</p>
+            <div class="grid grid-cols-3 gap-2" id="modeButtons">
+              <button data-mode="wall" class="mode-btn rounded-lg border px-2 py-2 text-xs font-semibold">Walls</button>
+              <button data-mode="start" class="mode-btn rounded-lg border px-2 py-2 text-xs font-semibold">Start</button>
+              <button data-mode="goal" class="mode-btn rounded-lg border px-2 py-2 text-xs font-semibold">Goal</button>
+            </div>
+          </div>
+
+          <div>
+            <label for="speed" class="mb-2 flex justify-between text-sm font-medium text-slate-300">
+              <span>Animation speed</span><span id="speedLabel" class="text-cyan-400">20 ms</span>
+            </label>
+            <input id="speed" type="range" min="5" max="100" value="20" step="5" class="w-full accent-cyan-500" />
+          </div>
+
+          <div class="grid grid-cols-2 gap-2">
+            <button id="runBtn" class="rounded-xl bg-cyan-500 px-3 py-2.5 text-sm font-bold text-slate-950 hover:bg-cyan-400 disabled:cursor-not-allowed disabled:opacity-60">Run search</button>
+            <button id="clearPathBtn" class="rounded-xl border border-slate-700 px-3 py-2.5 text-sm font-semibold hover:border-slate-500">Clear path</button>
+            <button id="randomBtn" class="rounded-xl border border-slate-700 px-3 py-2.5 text-sm font-semibold hover:border-slate-500">Random walls</button>
+            <button id="resetBtn" class="rounded-xl border border-rose-900/70 px-3 py-2.5 text-sm font-semibold text-rose-300 hover:bg-rose-950/40">Reset grid</button>
+          </div>
+
+          <div class="rounded-xl bg-slate-950/70 p-4 text-xs leading-5 text-slate-400">
+            <p><span class="font-semibold text-emerald-400">Green</span> = start</p>
+            <p><span class="font-semibold text-rose-400">Red</span> = goal</p>
+            <p><span class="font-semibold text-slate-200">Gray</span> = wall</p>
+            <p><span class="font-semibold text-sky-400">Blue</span> = explored</p>
+            <p><span class="font-semibold text-amber-300">Yellow</span> = final path</p>
+          </div>
+        </div>
+      </aside>
+
+      <div class="min-w-0">
+        <div id="status" class="mb-3 min-h-10 rounded-xl border border-slate-800 bg-slate-900/60 px-4 py-2.5 text-sm text-slate-300">
+          Ready. Draw walls or move the start/goal nodes.
+        </div>
+
+        <div class="overflow-auto rounded-2xl border border-slate-800 bg-slate-900 p-3 shadow-xl shadow-black/20">
+          <div id="grid" class="mx-auto grid w-fit select-none gap-[2px]" aria-label="Search grid"></div>
+        </div>
+
+        <div class="mt-4 grid gap-3 sm:grid-cols-3">
+          <div class="rounded-xl border border-slate-800 bg-slate-900/70 p-4">
+            <p class="text-xs uppercase tracking-wider text-slate-500">Result</p>
+            <p id="foundMetric" class="mt-1 text-xl font-bold">—</p>
+          </div>
+          <div class="rounded-xl border border-slate-800 bg-slate-900/70 p-4">
+            <p class="text-xs uppercase tracking-wider text-slate-500">Visited nodes</p>
+            <p id="visitedMetric" class="mt-1 text-xl font-bold">0</p>
+          </div>
+          <div class="rounded-xl border border-slate-800 bg-slate-900/70 p-4">
+            <p class="text-xs uppercase tracking-wider text-slate-500">Path length</p>
+            <p id="pathMetric" class="mt-1 text-xl font-bold">—</p>
+          </div>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <script src="/static/app.js" defer></script>
+</body>
+</html>
